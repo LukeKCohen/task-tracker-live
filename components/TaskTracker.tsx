@@ -40,20 +40,26 @@ export default function TaskTracker() {
     e.preventDefault();
     const trimmed = title.trim();
     if (!trimmed) return;
-    const { error } = await getSupabase().from("tasks").insert({ title: trimmed });
+    const { error } = await getSupabase()
+      .from("tasks")
+      .insert({ title: trimmed });
     if (error) return setError(error.message);
     setTitle("");
     load();
   }
 
   async function markDone(id: number) {
-    const { error } = await getSupabase().from("tasks").update({ done: true }).eq("id", id);
+    const { error } = await getSupabase()
+      .from("tasks")
+      .update({ done: true })
+      .eq("id", id);
     if (error) return setError(error.message);
     load();
   }
 
   const done = tasks.filter((t) => t.done).length;
-  const percent = tasks.length === 0 ? 0 : Math.round((done / tasks.length) * 100);
+  const percent =
+    tasks.length === 0 ? 0 : Math.round((done / tasks.length) * 100);
 
   return (
     <section>
@@ -110,11 +116,17 @@ export default function TaskTracker() {
             key={task.id}
             className="flex items-center justify-between gap-3 rounded-xl border-2 border-neutral-700 p-4"
           >
-            <span className={task.done ? "text-neutral-500 line-through" : "font-medium"}>
+            <span
+              className={
+                task.done ? "text-neutral-500 line-through" : "font-medium"
+              }
+            >
               {task.title}
             </span>
             {task.done ? (
-              <span className="shrink-0 font-bold text-emerald-300">✓ Done</span>
+              <span className="shrink-0 font-bold text-emerald-300">
+                ✓ Done
+              </span>
             ) : (
               <button
                 onClick={() => markDone(task.id)}
